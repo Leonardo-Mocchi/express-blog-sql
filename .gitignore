@@ -1,1 +1,5 @@
-*pizzas_db.sql
+*blog_db.sql
+
+.env
+
+node_modules/
