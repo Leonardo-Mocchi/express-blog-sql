@@ -1,5 +1,6 @@
 const connection = require('../database/db')
 
+// index
 function index(req, res) {
     //this creates as many rows for a single post as there are tags
     const sql = `
@@ -43,6 +44,7 @@ function index(req, res) {
     });
 };
 
+// show
 function show(req, res) {
     //this creates as many rows for a single post as there are tags
 
@@ -82,8 +84,10 @@ function show(req, res) {
     });
 }
 
+//destroy
+
+
 module.exports = {
     index,
-    show,
-    destroy
+    show
 }
