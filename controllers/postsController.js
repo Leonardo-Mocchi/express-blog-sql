@@ -18,6 +18,10 @@ function index(req, res) {
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
 
+        if (results.length === 0) {
+            return res.status(404).json({ error: "No posts found" });
+        }
+
         const posts = [];
 
         // to reduce the multiple rows for a single post to one
@@ -66,6 +70,10 @@ function show(req, res) {
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
 
+        if (results.length === 0) {
+            return res.status(404).json({ error: `Post with ID ${id} not found` });
+        }
+
         // Process the results to create a single post object
         const { post_id, title, content, image } = results[0]; // Get the first row for the post details
         const post = {
@@ -85,9 +93,33 @@ function show(req, res) {
 }
 
 //destroy
+function destroy(req, res) {
+    const { id } = req.params;
 
+    const checkSql = `SELECT * FROM posts WHERE id = ?`;
+
+    connection.query(checkSql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: `Post with ID ${id} not found` });
+        }
+
+        const deleteSql = `DELETE FROM posts WHERE id = ?`;
+
+        connection.query(deleteSql, [id], err => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            //to display a blank page
+            res.status(204).send();
+            // alternatively, to display a success message: 
+            /* res.status(200).send(`The post n°${id} was successfully deleted!`); */
+        });
+    });
+}
 
 module.exports = {
     index,
-    show
+    show,
+    destroy
 }
