@@ -1,15 +1,18 @@
 const express = require('express');
+const connection = require('./database/db');
+const PostsRouter = require('./routes/postsRouter')
 
-// Create an instance of an Express application
 const app = express();
-
-// Define a port for the server to listen on
 const PORT = 3000;
 
-// Add a basic route
+// Middleware to parse JSON
+app.use(express.json());
+
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
+    res.send('Welcome to the Blog Backend!')
+})
+
+app.use('/api/v1/posts', PostsRouter)
 
 // Start the server
 app.listen(PORT, () => {
